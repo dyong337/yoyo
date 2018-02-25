@@ -114,4 +114,174 @@
 		 
 * ##总结
 	> ![总结](/2018-02/images/zongjie.png)
-* 
+
+* ##[补间动画]
+[补间动画]:https://www.jianshu.com/p/733532041f46
+* 应用场景
+	1. Activity 的切换效果  
+	 	1. 启动动画
+			> Intent intent = new Intent (this,Acvtivity.class);     
+			> startActivity(intent);  
+			> overridePendingTransition(R.anim.enter_anim,R.anim.exit_anim);  
+			> // 采用overridePendingTransition（int enterAnim, int exitAnim）进行设置  
+			> // enterAnim：从Activity a跳转到Activity b，进入b时的动画效果资源ID
+			> // exitAnim：从Activity a跳转到Activity b，离开a时的动画效果资源Id  
+			> // 特别注意  
+			> // overridePendingTransition（）必须要在startActivity(intent)后被调用才能生效
+		2. 退出动画
+			>  finish();  
+			>  overridePendingTransition(R.anim.enter_anim,R.anim.exit_anim);  
+			>  // 采用overridePendingTransition（int enterAnim, int exitAnim）进行设置  
+			>  // enterAnim：从Activity a跳转到Activity b，进入b时的动画效果资源ID  
+			>  // exitAnim：从Activity a跳转到Activity b，离开a时的动画效果资源Id  
+			>  // 特别注意  
+			>  // overridePendingTransition（）必须要在finish()后被调用才能生效  
+		3. 系统自带动画
+			>  Intent intent = new Intent(MainActivity.this, SecActivity.class);  
+			>  startActivity(intent);  
+			>  // 淡入淡出的动画效果      
+			>  overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);  
+			>  // 从左向右滑动的效果   
+			>  overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+		4. 自定义动画
+	2. Fragment动画切换效果
+		1. 系统自带的动画切换效果
+			>  FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();  
+			>  fragmentTransaction.setTransition(int transit)；  
+			>  通过setTransition(int transit)进行设置  
+			>  transit参数说明  
+			>  1. FragmentTransaction.TRANSIT_NONE：无动画  
+			>  2. FragmentTransaction.TRANSIT_FRAGMENT_OPEN：标准的打开动画效果    
+			>  标准动画设置好后，在Fragment添加和移除的时候都会有。 
+		2. 自定义动画效果  
+			> FragmentTransaction fragmentTransaction = mFragmentManager
+                .beginTransaction();
+			> fragmentTransaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_left);
+			> 此处的自定义动画效果同Activity，此处不再过多描述
+	3. 视图组（ViewGroup）中子元素的出场效果
+		1. 设置子元素的出场动画res/anim/view_animation.xml
+		2. 设置 视图组（ViewGroup）的动画文件res/ anim /anim_layout.xml
+			
+			<?xml version="1.0" encoding="utf-8"?>
+			// 采用LayoutAnimation标签
+			<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:delay="0.5"
+			    // 子元素开始动画的时间延迟
+			    // 如子元素入场动画的时间总长设置为300ms
+			    // 那么 delay = "0.5" 表示每个子元素都会延迟150ms才会播放动画效果
+			    // 第一个子元素延迟150ms播放入场效果；第二个延迟300ms，以此类推
+			
+			    android:animationOrder="normal"
+			    // 表示子元素动画的顺序
+			    // 可设置属性为：
+			    // 1. normal ：顺序显示，即排在前面的子元素先播放入场动画
+			    // 2. reverse：倒序显示，即排在后面的子元素先播放入场动画
+			    // 3. random：随机播放入场动画
+			
+			    android:animation="@anim/view_animation"
+			    // 设置入场的具体动画效果
+			    // 将步骤1的子元素出场动画设置到这里
+		
+			    />
+		3. 为视图组（ViewGroup）指定andorid:layoutAnimation属性
+			1. xml  
+									
+					<?xml version="1.0" encoding="utf-8"?>
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					    xmlns:tools="http://schemas.android.com/tools"
+					    android:layout_width="match_parent"
+					    android:layout_height="match_parent"
+					    android:background="#FFFFFF"
+					    android:orientation="vertical" >
+					    <ListView
+					        android:id="@+id/listView1"
+					        android:layoutAnimation="@anim/anim_layout"
+					        // 指定layoutAnimation属性用以指定子元素的入场动画
+					        android:layout_width="match_parent"
+					        android:layout_height="match_parent" />
+					</LinearLayout>
+			2. 在Java代码中指定
+				
+					ListView lv = (ListView) findViewById(R.id.listView1);
+			        Animation animation = AnimationUtils.loadAnimation(this,R.anim.anim_item);
+			         // 加载子元素的出场动画
+			        LayoutAnimationController controller = new LayoutAnimationController(animation);
+			        controller.setDelay(0.5f);    
+			        controller.setOrder(LayoutAnimationController.ORDER_NORMAL);    
+				    // 设置LayoutAnimation的属性  
+				    lv.setLayoutAnimation(controller); 
+				    // 为ListView设置LayoutAnimation的属性
+
+## 逐帧动画
+* 原理
+	* 将动画拆分为 帧 的形式，且定义每一帧 = 每一张图片
+	* 逐帧动画的本质：按序播放一组预先定义好的图片
+* 具体使用 
+	1. 将动画资源（即每张图片资源）放到 drawable文件夹里
+		
+			技巧：
+				找到自己需要的gif动画
+				用 gif分解软件（如 GifSplitter）将 gif 分解成一张张图片即可
+	2. 设置 & 启动 动画
+		1. XML实现
+			1. 在 res/anim的文件夹里创建动画效果.xml文件
+			2. 步骤2：设置动画资源（图片资源)knight_attack.xml
+				
+					<?xml version="1.0" encoding="utf-8"?>
+					<animation-list
+					    xmlns:android="http://schemas.android.com/apk/res/android"
+					    android:oneshot="true" // 设置是否只播放一次，默认为false>
+
+						// item = 动画图片资源；duration = 设置一帧持续时间(ms)
+					    <item android:drawable="@drawable/a0" android:duration="100"/>
+					    <item android:drawable="@drawable/a1" android:duration="100"/>
+					    <item android:drawable="@drawable/a2" android:duration="100"/>
+					    <item android:drawable="@drawable/a3" android:duration="100"/>
+					    <item android:drawable="@drawable/a4" android:duration="100"/>
+					    <item android:drawable="@drawable/a5" android:duration="100"/>
+					    <item android:drawable="@drawable/a6" android:duration="100"/>
+					    <item android:drawable="@drawable/a7" android:duration="100"/>
+					    <item android:drawable="@drawable/a8" android:duration="100"/>
+					    <item android:drawable="@drawable/a9" android:duration="100"/>
+					    <item android:drawable="@drawable/a10" android:duration="100"/>
+					    <item android:drawable="@drawable/a11" android:duration="100"/>
+					    <item android:drawable="@drawable/a12" android:duration="100"/>
+					    <item android:drawable="@drawable/a13" android:duration="100"/>
+					    <item android:drawable="@drawable/a14" android:duration="100"/>
+					    <item android:drawable="@drawable/a15" android:duration="100"/>
+					    <item android:drawable="@drawable/a16" android:duration="100"/>
+					    <item android:drawable="@drawable/a17" android:duration="100"/>
+					    <item android:drawable="@drawable/a18" android:duration="100"/>
+					    <item android:drawable="@drawable/a19" android:duration="100"/>
+					    <item android:drawable="@drawable/a20" android:duration="100"/>
+					    <item android:drawable="@drawable/a21" android:duration="100"/>
+					    <item android:drawable="@drawable/a22" android:duration="100"/>
+					    <item android:drawable="@drawable/a23" android:duration="100"/>
+					    <item android:drawable="@drawable/a24" android:duration="100"/>
+					    <item android:drawable="@drawable/a25" android:duration="100"/>
+					</animation-list>
+			3.  在Java代码中载入 & 启动动画
+		
+					// 1. 设置动画
+					iv.setImageResource(R.drawable.knight_attack);
+					// 2. 获取动画对象
+	 				AnimationDrawable animationDrawable = (AnimationDrawable) iv.getDrawable();
+					// 3. 启动动画
+					animationDrawable.start();
+		2. Java代码实现
+			
+				AnimationDrawable animationDrawable = new AnimationDrawable();
+		        for (int i = 0; i <= 25; i++) {
+		            int id = getResources().getIdentifier("a" + i, "drawable", getPackageName());
+		            Drawable drawable = getResources().getDrawable(id);
+		            animationDrawable.addFrame(drawable, 100);
+		        }
+				animationDrawable.setOneShot(true);
+ 				iv.setImageDrawable(animationDrawable);
+				animationDrawable.stop();
+				// 特别注意：在动画start()之前要先stop()，不然在第一次动画之后会停在最后一帧，这样动画就只会触发一次
+				animationDrawable.start();
+* 特点
+	* 优点：使用简单、方便
+	* 缺点：容易引起 OOM，因为会使用大量 & 尺寸较大的图片资源
+		> 尽量避免使用尺寸较大的图片
