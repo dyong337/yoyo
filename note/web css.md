@@ -1,4 +1,4 @@
-##CSS
+##CSS基础
 * 派生选(上下文选择器)择器:派生选择器允许你根据文档的上下文关系来确定某个标签的样式
 	
 		li strong {
@@ -175,8 +175,123 @@
 		* font-weight:100;
 		* 关键字 100 ~ 900 为字体指定了 9 级加粗度；400 等价于 normal，而 700 等价于 bold
 	* 字体大小：font-size值可以是绝对或相对值。
-		* 绝对值 
-			* 
-		* 相对大小
+		* 绝对值  
+		* 相对大小  
+		* 使用像素来设置字体大小  
+		* 使用 em 来设置字体大小
+		* 结合使用百分比和 EM
+			> body {font-size:100%;}   
+			h1 {font-size:3.75em;}  
+			h2 {font-size:2.5em;}  
+			p {font-size:0.875em;}  
+* CSS 链接
+	* 链接的四种状态
+		* a:link - 普通的、未被访问的链接
+		* a:visited - 用户已访问的链接
+		* a:hover - 鼠标指针位于链接的上方
+		* a:active - 链接被点击的时刻
+		>a:link {color:#FF0000;}		/* 未被访问的链接 */  
+		a:visited {color:#00FF00;}	/* 已被访问的链接 */  
+		a:hover {color:#FF00FF;}	/* 鼠标指针移动到链接上   */  
+		a:active {color:#0000FF;}	/* 正在被点击的链接 */  
+* 列表 
+	* 列表类型：ist-style-type
+		> ul.circle {list-style-type:circle;}  
+		ul.square {list-style-type:square;}  
+		ol.upper-roman {list-style-type:upper-roman;}  
+		ol.lower-alpha {list-style-type:lower-alpha;}
+	* 列表项图像:list-style-image		
+		> ul li {list-style-image : url(xxx.gif)}
+	* 列表标志位置:
+		* inside: 列表项目标记放置在文本以内，且环绕文本根据标记对齐。
+		* outside:默认值。保持标记位于文本的左侧。列表项目标记放置在文本以外，且环绕文本不根据标记对齐。
+		* inherit:规定应该从父元素继承 list-style-position 属性的值。
+	* 简写列表样式:将以上 3 个列表样式属性合并为一个方便的属性：list-style
+		> li {list-style : url(example.gif) square inside}
+* CSS 表格:
+	* 表格边框: border 属性。
+		> table, th, td  
+		  {  
+		  border: 1px solid blue;  
+		  }
+		> 表格具有双线条边框。这是由于 table、th 以及 td 元素都有独立的边框。 
+	* 折叠边框:border-collapse 属性设置是否将表格边框折叠为单一边框：
+		> table
+		  {  
+		  border-collapse:collapse;  
+		  }  
+		   
+		> table,th, td  
+		  {  
+		  border: 1px solid black;  
+		  }
+		> 注释：如果没有规定 !DOCTYPE，border-collapse 属性可能会引起意想不到的错误。  
+		>>  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	* 表格宽度和高度:width,height
+	* 表格文本对齐:
+		* text-aligin:水平对齐
+			* left、right、center
+		* vertical-aligin:垂直对齐方式
+			* top、bottom、center
+	* 表格内边距:padding 
+	* 表格颜色:backgroun-color(背景色)，color(文本颜色)
+	* 设置分隔单元格边框的距离：border-spacing： 15px 20px
+	* 设置表格标题的位置:caption-side
+		* <caption style="caption-side:bottom">表格标题</caption>
+	* 是否显示表格中的空单元格：empty-cells
+		> table{
+		> empty-cells:hide(show);
+		> }
+	* 单元、行、列的算法：table-layout
+		> table{
+		> table-layout:fixed(auto);
+		> } 
+* [轮廓（outline)](http://www.w3school.com.cn/css/css_outline.asp)
 
-https://www.jianshu.com/p/aaef5ceb3936
+## CSS 框模型
+* CSS 框模型 
+	* 内边距
+		* width 和 height 指的是内容区域的宽度和高度。增加内边距、边框和外边距不会影响内容区域的尺寸，但是会增加元素框的总尺寸。
+		* 内边距：padding属性
+			* 接受长度值或百分比值，但不允许使用负值。
+			* padding-top
+			* padding-right
+			* padding-bottom
+			* padding-left
+	* 边框 ：border
+		* 每个边框有 3 个方面：宽度、样式，以及颜色
+		* 边框与背景
+		* 边框的样式: border-style
+		* 定义多种样式
+			* p.aside {border-style: solid dotted dashed double;}
+		* 定义单边样式
+			* border-top-style
+			* border-right-style
+			* border-bottom-style
+			* border-left-style
+		* 边框的宽度:border-width 属性
+			* 定长度值如：2px 或 0.1em
+			* 关键字：thin 、medium（默认值） 和 thick。
+			* 注释：CSS 没有定义 3 个关键字的具体宽度，所以一个用户代理可能把 thin 、medium 和 thick 分别设置为等于 5px、3px 和 2px，而另一个用户代理则分别设置为 3px、2px 和 1px。
+				> 所以，我们可以这样设置边框的宽度：  
+				>> p {border-style: solid; border-width: 5px;}
+		* 定义单边宽度
+			> p {border-style: solid; border-width: 15px 5px 15px 5px;}
+			* border-top-width
+			* border-right-width
+			* border-bottom-width
+			* border-left-width
+		* 边框的颜色:border-color 属性，它一次可以接受最多 4 个颜色值。
+			> p {  
+			  border-style: solid;  
+			  border-color: blue rgb(25%,35%,45%) #909090   red;  
+			  }
+			* border-top-color
+			* border-right-color
+			* border-bottom-color
+			* border-left-color
+		* 透明边框
+			* CSS2 引入了边框颜色值 transparent。这个值用于创建有宽度的不可见边框
+* [外边距](http://www.w3school.com.cn/css/css_margin.asp)
+* 外边距合并
+## CSS定位
