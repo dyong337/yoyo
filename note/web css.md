@@ -294,4 +294,31 @@
 			* CSS2 引入了边框颜色值 transparent。这个值用于创建有宽度的不可见边框
 * [外边距](http://www.w3school.com.cn/css/css_margin.asp)
 * 外边距合并
+
 ## CSS定位
+* [display属性](http://www.w3school.com.cn/cssref/pr_class_display.asp)
+	* none： 此元素不会被显示。
+	* block：此元素将显示为块级元素，此元素前后会带有换行符。
+	* inline：默认。此元素会被显示为内联元素，元素前后没有换行符。 
+* CSS 定位机制
+	* 普通流
+		* 块级框:从上到下一个接一个地排列，框之间的垂直距离是由框的垂直外边距计算出来。
+		* 行内框:在一行中水平布置.
+			> 由一行形成的水平框称为行框（Line Box），行框的高度总是足以容纳它包含的所有行内框。不过，设置行高可以增加这个框的高度。
+	* 浮动
+	* 绝对定位
+	* [position属性](http://www.w3school.com.cn/cssref/pr_class_position.asp):这个属性定义建立元素布局所用的定位机制
+		* absolute:生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。
+		元素的位置通过 "left", "top", "right" 以及 "bottom" 属性进行规定。
+			> h2  
+			  {  
+			  position:absolute;  
+			  left:100px;  
+			  top:150px;  
+			  }
+		* fixed:生成绝对定位的元素，相对于*浏览器窗口*进行定位。
+		* [relative](CSS绝对定位absolute详解):生成相对定位的元素，相对于其正常位置进行定位。因此，"left:20" 会向元素的 LEFT 位置添加 20 像素。
+		* static:默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。
+		* inherit:规定应该从父元素继承 position 属性的值。
+* 相对定位:如果对一个元素进行相对定位，它将出现在它所在的位置上。然后，可以通过设置垂直或水平位置，让这个元素“相对于”它的起点进行移动。		
+* 
