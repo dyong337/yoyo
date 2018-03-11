@@ -1,8 +1,4 @@
-* [小程序帐号](https://mp.weixin.qq.com/wxopen/initprofile?action=home&lang=zh_CN&token=837925189)
 
-* [小程序没有授权时的处理方法](http://blog.csdn.net/a49220824/article/details/73662360)
-* [微信小程序自定义对话框+弹出和隐藏动画详解](http://blog.csdn.net/pcaxb/article/details/56276180)
-* [【微信小程序】实现属于自己的美美哒弹窗](http://blog.csdn.net/m549393829/article/details/77996153)
 ##app.js
 	
 		const openIdUrl = require('./config').openIdUrl
